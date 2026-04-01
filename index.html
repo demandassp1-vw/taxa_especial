@@ -356,15 +356,9 @@
       this.value = this.value.replace(/\D/g, '').slice(0, 14);
     });
 
-    // Máscara Ano Fab/Mod — só números e hífen
+    // Ano Fab/Mod — aceita hífen, barra ou texto livre (ex: 2017-2018 ou 2017/2018)
     document.getElementById('ano').addEventListener('input', function() {
-      let v = this.value.replace(/[^\d-]/g, '');
-      // Auto-insere hífen após 4 dígitos
-      if (/^\d{4}$/.test(v) && !this._deleting) v = v + '-';
-      this.value = v;
-    });
-    document.getElementById('ano').addEventListener('keydown', function(e) {
-      this._deleting = e.key === 'Backspace';
+      this.value = this.value.replace(/[^\d\-\/]/g, '').slice(0, 9);
     });
 
     // Máscara Taxa — só números, vírgula e %
@@ -428,7 +422,7 @@
 
       return `
 <p style="font-family:Arial,sans-serif;font-size:13px;margin:0 0 4px 0;color:#000;">Prezado(a) Gestor(a),</p>
-<p style="font-family:Arial,sans-serif;font-size:13px;margin:0 0 16px 0;color:#000;">Segue abaixo a solicitação de taxa especial para análise e aprovação.</p>
+<p style="font-family:Arial,sans-serif;font-size:13px;margin:0 0 28px 0;color:#000;">Segue abaixo a solicitação de taxa especial para análise e aprovação.</p>
 <table style="border-collapse:collapse;width:600px;border:1px solid #ccc;">
   <thead>
     <tr>
@@ -457,9 +451,9 @@
     }
 
     async function sendEmail() {
-      const cliente = g('cliente') || '—';
-      const dn      = g('dn')      || '—';
-      const subject = `Solicitação de Taxa Especial - DN ${dn} - ${cliente}`;
+      const dn       = g('dn')       || '—';
+      const proposta = g('proposta') || '—';
+      const subject  = `Taxa Especial - DN ${dn} - Proposta ${proposta}`;
       const html    = buildEmailHtml();
 
       let copied = false;
