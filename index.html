@@ -456,9 +456,6 @@
       const subject  = `Taxa Especial - DN ${dn} - Proposta ${proposta}`;
       const html    = buildEmailHtml();
 
-      // Abre o e-mail PRIMEIRO, antes de qualquer operação de clipboard
-      window.location.href = `mailto:?subject=${encodeURIComponent(subject)}`;
-
       let copied = false;
       try {
         const blob = new Blob([html], { type: 'text/html' });
@@ -480,6 +477,8 @@
           copied = true;
         } catch(e2) { copied = false; }
       }
+
+      window.location.href = `mailto:?subject=${encodeURIComponent(subject)}`;
 
       showToast(copied
         ? '📧 E-mail aberto! Cole com Ctrl+V no corpo.'
